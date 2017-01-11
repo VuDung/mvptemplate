@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.jakewharton.butterknife'
+android {
+  compileSdkVersion rootProject.ext.compileSdkVersion
+  buildToolsVersion rootProject.ext.buildToolsVersion
+
+  defaultConfig {
+    applicationId "com.tnc.template"
+    minSdkVersion rootProject.ext.minSdkVersion
+    targetSdkVersion rootProject.ext.compileSdkVersion
+    vectorDrawables.useSupportLibrary = true
+    versionCode 1
+    versionName "1.0"
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    // Custom field
+    buildConfigField 'String', 'END_POINT_URL', '"https://hacker-news.firebaseio.com/v0/"'
+  }
+
+  dataBinding {
+    enabled true
+  }
+
+  signingConfigs {
+    release {
+      storeFile file('./debug.keystore')
+      keyAlias 'androiddebugkey'
+      keyPassword 'android'
+      storePassword 'android'
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    applicationVariants.all { variant ->
+      variant.outputs.each { output ->
+        if (output.outputFile.name.contains('app-release')) {
+          output.outputFile = new File(output.outputFile.parent /*"./apk/"*/,
+              "template-release-${variant.versionName}.apk") //-${getDate()}.apk")
+        } else if (output.outputFile.name.contains('app-debug')) {
+          output.outputFile = new File(output.outputFile.parent /*"./apk/"*/,
+              "template-debug-${variant.versionName}.apk") //-${getDate()}.apk")
+        }
+      }
+    }
+  }
+
+
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  def libs = rootProject.ext
+
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile libs.appCompatV7
+  compile libs.supportDesign
+
+  compile libs.common
+  compile libs.resources
+  compile libs.dagger
+  annotationProcessor libs.daggerCompiler
+
+  annotationProcessor libs.butterKnifeCompiler
+
+  testCompile libs.junit
+  androidTestCompile(rootProject.ext.espressoCore, {
+    exclude group: 'com.android.support', module: 'support-annotations'
+  })
+}
+
+def getDate() {
+  def date = new Date()
+  def formattedDate = date.format('dd.MM.yyyy')
+  return formattedDate
+}
