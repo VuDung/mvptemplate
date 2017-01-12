@@ -1,6 +1,7 @@
 package com.tnc.template;
 
 import com.tnc.template.data.DataModule;
+import com.tnc.template.data.NetworkModule;
 import com.tnc.template.login.LoginComponent;
 import com.tnc.template.login.LoginModule;
 import com.tnc.template.main.MainComponent;

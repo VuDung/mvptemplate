@@ -15,22 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by CUSDungVT on 12/22/2016.
  */
-@Module
+@Module(includes = NetworkModule.class)
 public class DataModule {
-  private final int CONNECTION_TIME_OUT = 60000; //30s
-  private final int READ_TIME_OUT = 60000; //30s
 
-  @Singleton
-  @Provides
-  public OkHttpClient provideOkHttpClient() {
-    HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-    logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-    return new OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .connectTimeout(CONNECTION_TIME_OUT, TimeUnit.MILLISECONDS)
-        .readTimeout(READ_TIME_OUT, TimeUnit.MILLISECONDS)
-        .build();
-  }
 
   @Singleton
   @Provides
