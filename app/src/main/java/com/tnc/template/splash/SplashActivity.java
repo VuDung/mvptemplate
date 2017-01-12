@@ -1,5 +1,6 @@
 package com.tnc.template.splash;
 
+import android.os.Bundle;
 import android.os.Handler;
 import com.tnc.template.R;
 import com.tnc.template.common.base.BaseActivity;
@@ -17,10 +18,9 @@ public class SplashActivity extends BaseActivity{
     return R.layout.activity_splash;
   }
 
-  @Override protected void dependencyInjection() {
+  @Override protected void dependencyInjection(Bundle savedInstanceState) {
     injector().inject(this);
   }
-
 
   @Override protected void onResume() {
     super.onResume();

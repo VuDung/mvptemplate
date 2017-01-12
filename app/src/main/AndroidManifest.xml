@@ -16,6 +16,10 @@
     </activity>
     <activity android:name=".main.MainActivity"/>
     <activity android:name=".login.LoginActivity"/>
+    <provider
+        android:authorities="com.tnc.template.provider"
+        android:name=".data.storage.TemplateProvider"
+        android:exported="false"/>
   </application>
 
 </manifest>

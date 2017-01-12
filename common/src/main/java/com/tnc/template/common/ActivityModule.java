@@ -1,16 +1,17 @@
 package com.tnc.template.common;
 
 import android.content.Context;
-import com.tnc.template.common.di.Names;
+import com.tnc.template.data.DataModule;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 /**
  * Created by CUSDungVT on 12/23/2016.
  */
 
-@Module
+@Module(includes = DataModule.class)
 public class ActivityModule {
   private Context context;
 
@@ -18,9 +19,9 @@ public class ActivityModule {
     this.context = context;
   }
 
+  @Singleton
   @Provides
-  @Named(Names.NAME_ACTIVITY)
-  public Context provideContext(){
+  Context provideContext(){
     return context;
   }
 }

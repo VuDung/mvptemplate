@@ -1,5 +1,6 @@
 package com.tnc.template.login;
 
+import android.os.Bundle;
 import com.tnc.template.common.base.BaseActivity;
 import com.tnc.template.common.di.Injector;
 
@@ -14,7 +15,7 @@ public class LoginActivity extends BaseActivity implements Injector{
     return 0;
   }
 
-  @Override protected void dependencyInjection() {
+  @Override protected void dependencyInjection(Bundle savedInstanceState) {
     loginComponent().inject(this);
   }
 

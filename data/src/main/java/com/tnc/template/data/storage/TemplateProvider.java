@@ -1,4 +1,4 @@
-package com.tnc.template.data.local;
+package com.tnc.template.data.storage;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;

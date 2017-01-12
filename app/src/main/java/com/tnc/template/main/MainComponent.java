@@ -1,5 +1,6 @@
 package com.tnc.template.main;
 
+import com.tnc.template.main.list.ListStoryFragment;
 import dagger.Subcomponent;
 
 /**
@@ -8,4 +9,5 @@ import dagger.Subcomponent;
 @Subcomponent(modules = MainModule.class)
 public interface MainComponent {
   void inject(MainActivity mainActivity);
+  void inject(ListStoryFragment listStoryFragment);
 }

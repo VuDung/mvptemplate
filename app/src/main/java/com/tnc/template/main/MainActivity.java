@@ -11,12 +11,14 @@ import android.widget.ScrollView;
 import butterknife.BindView;
 import com.tnc.template.R;
 import com.tnc.template.common.base.BaseActivity;
+import com.tnc.template.common.di.Injector;
+import com.tnc.template.main.list.ListStoryFragment;
 
 /**
  * Created by CUSDungVT on 1/10/2017.
  */
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements Injector{
 
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.container) FrameLayout container;
@@ -29,12 +31,16 @@ public class MainActivity extends BaseActivity {
     return R.layout.activity_main;
   }
 
-  @Override protected void dependencyInjection() {
+  @Override protected void dependencyInjection(Bundle savedInstanceState) {
     mainComponent().inject(this);
 
     setSupportActionBar(toolbar);
     drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
     drawerLayout.addDrawerListener(drawerToggle);
+
+    if(savedInstanceState == null){
+      getSupportFragmentManager().beginTransaction().replace(R.id.container, new ListStoryFragment()).commit();
+    }
   }
 
   @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {
@@ -60,5 +66,11 @@ public class MainActivity extends BaseActivity {
       mainComponent = superComponent().plus(new MainModule());
     }
     return mainComponent;
+  }
+
+  @Override public void inject(Object object) {
+    if(object instanceof ListStoryFragment){
+      mainComponent().inject((ListStoryFragment)object);
+    }
   }
 }

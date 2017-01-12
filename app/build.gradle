@@ -15,7 +15,7 @@ android {
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     // Custom field
-    buildConfigField 'String', 'END_POINT_URL', '"https://hacker-news.firebaseio.com/v0/"'
+    //buildConfigField 'String', 'END_POINT_URL', '"https://hacker-news.firebaseio.com/v0/"'
   }
 
   dataBinding {

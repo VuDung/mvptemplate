@@ -2,7 +2,6 @@ package com.tnc.template;
 
 import android.app.Application;
 import android.content.Context;
-import com.tnc.template.common.di.Names;
 import com.tnc.template.common.navigator.Navigator;
 import com.tnc.template.data.Network;
 import com.tnc.template.data.storage.AppPreference;
@@ -17,14 +16,14 @@ import javax.inject.Singleton;
 @Module
 public class AppModule {
   private Application application;
-
+  public static final String APPLICATION = "application";
   public AppModule(Application application) {
     this.application = application;
   }
 
   @Singleton
   @Provides
-  @Named(Names.NAME_APPLICATION) Context provideContext(){
+  @Named(APPLICATION) Context provideContext(){
     return application;
   }
 
@@ -32,12 +31,6 @@ public class AppModule {
   @Provides
   Application provideApplication(){
     return application;
-  }
-
-  @Singleton
-  @Provides
-  @Named("END_POINT_URL") String provideEndPointUrl() {
-    return BuildConfig.END_POINT_URL;
   }
 
   @Singleton

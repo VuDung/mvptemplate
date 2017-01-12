@@ -17,7 +17,7 @@ import com.tnc.template.common.di.SuperComponent;
 public abstract class BaseActivity extends AppCompatActivity{
 
   protected abstract @LayoutRes int layoutRes();
-  protected abstract @Injection void dependencyInjection();
+  protected abstract @Injection void dependencyInjection(Bundle savedInstanceState);
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -26,7 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity{
       setContentView(layoutRes);
       ButterKnife.bind(this);
     }
-    dependencyInjection();
+    dependencyInjection(savedInstanceState);
   }
 
   protected Injector injector(){
