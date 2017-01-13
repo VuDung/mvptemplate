@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="TextTitle">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">@color/blackT87</item>
+  </style>
+  <style name="TextSubTitle">
+    <item name="android:textSize">12sp</item>
+    <item name="android:textColor">@color/grey800</item>
+  </style>
+</resources>

@@ -1,7 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+
+  <Button
+      android:id="@+id/drawerTop"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_top"
+      style="@style/TextDrawerItem" />
+
+  <Button
+      android:id="@+id/drawerNew"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_new"
+      style="@style/TextDrawerItem" />
+
+  <Button
+      android:id="@+id/drawerShow"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_show"
+      style="@style/TextDrawerItem" />
+
+  <Button
+      android:id="@+id/drawerAsk"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_ask"
+      style="@style/TextDrawerItem" />
+
+
+  <Button
+      android:id="@+id/drawerJob"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_job"
+      style="@style/TextDrawerItem" />
+
+
+  <Button
+      android:id="@+id/drawerBest"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/drawer_item_height"
+      android:background="@drawable/drawable_drawer_item_selector"
+      android:gravity="center_vertical"
+      android:text="@string/drawer_best"
+      style="@style/TextDrawerItem" />
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/divider_height"
+      android:layout_margin="10dp"
+      android:background="@color/grey800" />
 </LinearLayout>

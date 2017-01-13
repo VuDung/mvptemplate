@@ -1,7 +1,8 @@
 package com.tnc.template.data.transformer;
 
-import com.tnc.template.data.Network;
+import android.content.Context;
 import com.tnc.template.data.exception.NetworkException;
+import com.tnc.template.data.util.AppUtils;
 import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.functions.Func1;
@@ -12,15 +13,15 @@ import rx.schedulers.Schedulers;
  */
 
 public class NetworkConnectionTransformer<T> implements Observable.Transformer<T, T>{
-  private Network network;
-  private NetworkConnectionTransformer(Network network){
-    this.network = network;
+  private Context context;
+  private NetworkConnectionTransformer(Context context){
+    this.context = context;
   }
-  public static <T> NetworkConnectionTransformer<T> create(Network network){
-    return new NetworkConnectionTransformer<>(network);
+  public static <T> NetworkConnectionTransformer<T> create(Context context){
+    return new NetworkConnectionTransformer<>(context);
   }
   @Override public Observable<T> call(Observable<T> tObservable) {
-    if(network.isNetworkAvailable()){
+    if(AppUtils.hasConnection(context)){
       return tObservable;
     }else {
       return Observable.timer(1, TimeUnit.SECONDS, Schedulers.immediate())

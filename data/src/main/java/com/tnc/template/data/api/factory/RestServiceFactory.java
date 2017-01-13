@@ -2,6 +2,7 @@ package com.tnc.template.data.api.factory;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.support.annotation.NonNull;
 import java.util.concurrent.Executor;
 import okhttp3.Call;
 import retrofit2.Retrofit;
@@ -56,7 +57,7 @@ public interface RestServiceFactory {
 
   class MainThreadExecutor implements Executor{
     private Handler handler = new Handler(Looper.getMainLooper());
-    @Override public void execute(Runnable runnable) {
+    @Override public void execute(@NonNull Runnable runnable) {
       handler.post(runnable);
     }
   }

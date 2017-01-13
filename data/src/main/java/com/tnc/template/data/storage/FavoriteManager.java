@@ -16,7 +16,6 @@ import com.tnc.template.data.entity.WebItem;
 import java.util.Collection;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -107,6 +106,25 @@ public class FavoriteManager implements LocalItemManager<Favorite>{
         item instanceof Favorite ? String.valueOf(((Favorite)item).getTime()) : String.valueOf(System.currentTimeMillis())
         );
     return context.getContentResolver().insert(TemplateProvider.URI_FAVORITE, contentValues);
+  }
+
+  @WorkerThread
+  public Observable<Boolean> check(Context context, String itemId){
+    if (TextUtils.isEmpty(itemId)) {
+      return Observable.just(false);
+    }
+    Cursor cursor = context.getContentResolver().query(
+        TemplateProvider.URI_FAVORITE,
+        null,
+        TemplateProvider.FavoriteEntry.COLUMN_ITEM_ID + " = ?",
+        new String[] { String.valueOf(itemId) },
+        null);
+    boolean result = false;
+    if (cursor != null) {
+      result = cursor.getCount() > 0;
+      cursor.close();
+    }
+    return Observable.just(result);
   }
 
   @WorkerThread

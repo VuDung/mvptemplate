@@ -19,7 +19,7 @@ public abstract class BaseFragment extends Fragment {
 
   protected abstract @LayoutRes int layoutRes();
 
-  protected abstract @Injection void dependencyInjection();
+  protected abstract @Injection void dependencyInjection(Bundle savedInstanceState);
 
   @Nullable @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -28,10 +28,10 @@ public abstract class BaseFragment extends Fragment {
     if (layoutRes != 0) {
       View view = inflater.inflate(layoutRes, container, false);
       ButterKnife.bind(this, view);
-      dependencyInjection();
+      dependencyInjection(savedInstanceState);
       return view;
     } else {
-      dependencyInjection();
+      dependencyInjection(savedInstanceState);
       return super.onCreateView(inflater, container, savedInstanceState);
     }
   }

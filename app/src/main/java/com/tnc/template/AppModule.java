@@ -16,14 +16,14 @@ import javax.inject.Singleton;
 @Module
 public class AppModule {
   private Application application;
-  public static final String APPLICATION = "application";
+  //public static final String APPLICATION = "application";
   public AppModule(Application application) {
     this.application = application;
   }
 
   @Singleton
   @Provides
-  @Named(APPLICATION) Context provideContext(){
+  Context provideContext(){
     return application;
   }
 

@@ -1,17 +1,128 @@
 package com.tnc.template.main.list;
 
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.tnc.template.R;
 import com.tnc.template.common.base.BaseFragment;
+import com.tnc.template.data.api.ItemManager;
+import com.tnc.template.data.entity.Item;
+import javax.inject.Inject;
 
 /**
  * Created by CUSDungVT on 1/12/2017.
  */
 
-public class ListStoryFragment extends BaseFragment{
+public class ListStoryFragment extends BaseFragment implements ListStoryView {
+
+  @BindView(R.id.rvList) RecyclerView rvList;
+  @BindView(R.id.vLoading) FrameLayout vLoading;
+  @BindView(R.id.vEmpty) LinearLayout vEmpty;
+  @BindView(R.id.tvErrorMessage) TextView tvErrorMessage;
+  @BindView(R.id.vError) LinearLayout vError;
+  @BindView(R.id.vErrorNetwork) LinearLayout vErrorNetwork;
+  @Inject ListStoryPresenter presenter;
+
+  private int cacheMode;
+  private String fetchMode;
+  private static final String ARGS_FETCH_MODE = "args_fetch_mode";
+  private final String TAG = ListStoryFragment.class.getSimpleName();
+  public static ListStoryFragment newInstance(String fetchMode) {
+    Bundle args = new Bundle();
+    args.putString(ARGS_FETCH_MODE, fetchMode);
+    ListStoryFragment fragment = new ListStoryFragment();
+    fragment.setArguments(args);
+    return fragment;
+  }
   @Override protected int layoutRes() {
-    return 0;
+    return R.layout.fragment_list;
   }
 
-  @Override protected void dependencyInjection() {
+  @Override protected void dependencyInjection(Bundle savedInstanceState) {
     injector().inject(this);
+
+    fetchMode = getArguments().getString(ARGS_FETCH_MODE);
+    Log.i(TAG, "[FetchMode:" + fetchMode + "]");
+    presenter.attachView(this);
+    presenter.getStories(fetchMode);
   }
+
+  @Override public void onDestroyView() {
+    presenter.detachView();
+    super.onDestroyView();
+  }
+
+  @Override public void showLoading() {
+    hideEmptyView();
+    hideErrorView();
+    hideErrorNetwork();
+    vLoading.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideLoading() {
+    vLoading.setVisibility(View.GONE);
+  }
+
+  @Override public void showErrorView(String message) {
+    hideLoading();
+    hideEmptyView();
+    hideContent();
+    vError.setVisibility(View.VISIBLE);
+    if (!TextUtils.isEmpty(message)) {
+      tvErrorMessage.setText(message);
+    }
+  }
+
+  @OnClick({R.id.vError, R.id.vErrorNetwork, R.id.vEmpty})
+  public void onClickViewError(){
+    presenter.getStories(fetchMode);
+  }
+
+  @Override public void hideErrorView() {
+    vError.setVisibility(View.GONE);
+  }
+
+  @Override public void showErrorNetwork() {
+    hideLoading();
+    hideEmptyView();
+    hideContent();
+    hideErrorView();
+    vErrorNetwork.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideErrorNetwork() {
+    vErrorNetwork.setVisibility(View.GONE);
+  }
+
+  @Override public void hideEmptyView() {
+    vEmpty.setVisibility(View.GONE);
+  }
+
+  @Override public void showEmptyView() {
+    hideLoading();
+    hideErrorView();
+    hideContent();
+    vEmpty.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideContent() {
+    rvList.setVisibility(View.GONE);
+  }
+
+  @Override public void swapContent(Item[] items) {
+    hideLoading();
+    hideErrorView();
+    hideEmptyView();
+  }
+
 }

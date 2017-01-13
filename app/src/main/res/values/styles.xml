@@ -14,4 +14,9 @@
     <item name="color">@android:color/white</item>
   </style>
 
+  <style name="TextDrawerItem" parent="TextTitle">
+    <item name="android:paddingLeft">10dp</item>
+    <!--<item name="textColor">@drawable/drawer_text_selector</item>-->
+  </style>
+
 </resources>

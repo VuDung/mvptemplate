@@ -9,6 +9,6 @@ import android.support.annotation.Nullable;
 public interface ResponseListener<T> {
 
   void onResponse(@Nullable T data);
-  void onError(String message);
+  void onError(Throwable throwable);
 
 }

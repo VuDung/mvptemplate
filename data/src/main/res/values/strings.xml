@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="saved">Saved %1$s ago</string>
+
+  <!-- Preference keys -->
+  <string name="pref_fetch_mode">pref_fetch_mode</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.tnc.template.login;
 
+import android.os.Bundle;
 import com.tnc.template.common.base.BaseFragment;
 
 /**
@@ -11,7 +12,7 @@ public class LoginFragment extends BaseFragment{
     return 0;
   }
 
-  @Override protected void dependencyInjection() {
+  @Override protected void dependencyInjection(Bundle savedInstanceState) {
     injector().inject(this);
   }
 }

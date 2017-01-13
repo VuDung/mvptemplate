@@ -1,5 +1,7 @@
 package com.tnc.template.data.api;
 
+import android.content.ContentResolver;
+import android.content.Context;
 import com.tnc.template.data.api.factory.RestServiceFactory;
 import com.tnc.template.data.api.response.ResponseListener;
 import com.tnc.template.data.entity.HackerNewsItem;
@@ -7,7 +9,9 @@ import com.tnc.template.data.entity.Item;
 import com.tnc.template.data.entity.UserItem;
 import com.tnc.template.data.storage.FavoriteManager;
 import com.tnc.template.data.storage.SessionManager;
+import com.tnc.template.data.transformer.NetworkConnectionTransformer;
 import javax.inject.Inject;
+import javax.inject.Named;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -26,15 +30,18 @@ public class HackerNewsManager implements ItemManager {
   public static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
   static final String BASE_API_URL = "https://" + HOST + "/v0/";
 
+  private Context context;
   private RestService restService;
   private SessionManager sessionManager;
   private FavoriteManager favoriteManager;
 
-  @Inject
+
   public HackerNewsManager(
+      Context context,
       RestServiceFactory restServiceFactory,
       SessionManager sessionManager,
       FavoriteManager favoriteManager) {
+    this.context = context;
     this.restService = restServiceFactory.rxEnable(true).create(BASE_API_URL, RestService.class);
     this.sessionManager = sessionManager;
     this.favoriteManager = favoriteManager;
@@ -46,16 +53,46 @@ public class HackerNewsManager implements ItemManager {
       return;
     }
     getStoriesObservable(filter, mode)
+        .compose(NetworkConnectionTransformer.create(context))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(
             listener::onResponse,
-            throwable -> listener.onError(throwable != null ? throwable.getMessage() : ""));
+            listener::onError);
   }
 
   @Override public void getItem(String itemId, @CacheMode int mode,
       ResponseListener<Item> listener) {
+    if(listener == null) return;
+    Observable<HackerNewsItem> itemObservable;
+    switch (mode){
+      case MODE_DEFAULT:
+        default:
+        itemObservable = restService.itemRx(itemId);
+        break;
+      case MODE_CACHE:
+        itemObservable = restService.cachedItemRx(itemId);
+        break;
+      case MODE_NETWORK:
+        itemObservable = restService.networkItemRx(itemId);
+        break;
+    }
+    Observable.defer(()->Observable.zip(
+        sessionManager.isViewed(context, itemId),
+        favoriteManager.check(context, itemId),
+        itemObservable,
+        (isViewed, isFavorited, hackerNewsItem)-> {
+          if (hackerNewsItem != null) {
 
+          }
+          return hackerNewsItem;
+        }))
+        .compose(NetworkConnectionTransformer.<Item>create(context))
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(
+            listener::onResponse,
+            listener::onError);
   }
 
   private Observable<Item[]> getStoriesObservable(@FetchMode String filter, @CacheMode int cacheMode){
@@ -88,7 +125,11 @@ public class HackerNewsManager implements ItemManager {
       return null;
     }
     HackerNewsItem[] items = new HackerNewsItem[ids.length];
-    return null;
+    for(int i = 0; i < ids.length; i++){
+      HackerNewsItem item = new HackerNewsItem(ids[i]);
+      items[i] = item;
+    }
+    return items;
   }
 
   interface RestService {

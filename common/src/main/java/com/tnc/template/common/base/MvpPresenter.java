@@ -23,4 +23,9 @@ public class MvpPresenter<MvpView> {
       this.viewRef.clear();
     }
   }
+
+  public boolean isAttached(){
+    return viewRef.get() != null;
+  }
+
 }

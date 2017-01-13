@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
+import com.tnc.template.data.annotation.WorkerThread;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,7 +18,8 @@ import rx.schedulers.Schedulers;
 public class SessionManager {
   public SessionManager() {}
 
-  public Observable<Boolean> check(Context context, String itemId) {
+  @WorkerThread
+  public Observable<Boolean> isViewed(Context context, String itemId) {
     if (TextUtils.isEmpty(itemId)) {
       return Observable.just(false);
     }
