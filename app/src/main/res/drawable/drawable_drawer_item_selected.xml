@@ -7,7 +7,7 @@
   </item>
   <item android:left="5dp">
     <shape android:shape="rectangle">
-      <solid android:color="@color/white"/>
+      <solid android:color="@color/solarizedBase1"/>
     </shape>
   </item>
 </layer-list>

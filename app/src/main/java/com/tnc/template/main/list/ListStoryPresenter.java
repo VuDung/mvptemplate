@@ -20,14 +20,14 @@ public class ListStoryPresenter extends MvpPresenter<ListStoryView>{
     this.hackerNewsManager = hackerNewsManager;
   }
 
-  public void getStories(String fetchMode){
+  public void getStories(String fetchMode, int cacheMode){
     if(getView() == null){
       return;
     }
     getView().showLoading();
     hackerNewsManager.getStories(
         fetchMode,
-        ItemManager.MODE_CACHE,
+        cacheMode,
         new ListResponseListener(this));
   }
 

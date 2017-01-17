@@ -1,6 +1,7 @@
 package com.tnc.template.data;
 
 import android.content.Context;
+import android.util.Log;
 import com.tnc.template.data.api.HackerNewsManager;
 import com.tnc.template.data.api.factory.RestServiceFactory;
 import com.tnc.template.data.util.AppUtils;
@@ -9,7 +10,6 @@ import dagger.Provides;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -39,9 +39,9 @@ public class NetworkModule {
   Call.Factory provideCallFactory(Context context) {
     return new OkHttpClient.Builder()
         .cache(new Cache(context.getCacheDir(), CACHE_SIZE))
-        .addInterceptor(new LoggingInterceptor())
-        .addInterceptor(new ConnectionAwareInterceptor(context))
         .addNetworkInterceptor(new CacheOverrideNetworkInterceptor())
+        .addInterceptor(new ConnectionAwareInterceptor(context))
+        .addInterceptor(new LoggingInterceptor())
         .followRedirects(false)
         .build();
   }
@@ -52,7 +52,6 @@ public class NetworkModule {
       CACHE_ENABLE_HOST.put(HackerNewsManager.HOST, RestServiceFactory.CACHE_CONTROL_MAX_AGE_30M);
     }
     private Context context;
-
     ConnectionAwareInterceptor(Context context) {
       this.context = context;
     }
@@ -60,7 +59,7 @@ public class NetworkModule {
     @Override public Response intercept(Chain chain) throws IOException {
       Request request = chain.request();
       boolean forceCache = CACHE_ENABLE_HOST.containsKey(request.url().host())
-          && AppUtils.hasConnection(context);
+          && !AppUtils.hasConnection(context);
       return chain.proceed(forceCache
           ?
           request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build()
@@ -84,9 +83,7 @@ public class NetworkModule {
   }
 
   private static class LoggingInterceptor implements Interceptor {
-    private final Interceptor debugLoggingInterceptor = new HttpLoggingInterceptor().setLevel(
-        BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
-
+    private final Interceptor debugLoggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     @Override public Response intercept(Chain chain) throws IOException {
       return debugLoggingInterceptor.intercept(chain);
     }

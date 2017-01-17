@@ -33,9 +33,11 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
   @BindView(R.id.vErrorNetwork) LinearLayout vErrorNetwork;
   @Inject ListStoryPresenter presenter;
 
-  private int cacheMode;
+  private int cacheMode = ItemManager.MODE_DEFAULT;
   private String fetchMode;
   private static final String ARGS_FETCH_MODE = "args_fetch_mode";
+  private static final String STATE_FILTER_MODE = "state_filter_mode";
+  private static final String STATE_CACHE_MODE = "state_cache_mode";
   private final String TAG = ListStoryFragment.class.getSimpleName();
   public static ListStoryFragment newInstance(String fetchMode) {
     Bundle args = new Bundle();
@@ -50,11 +52,22 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
 
   @Override protected void dependencyInjection(Bundle savedInstanceState) {
     injector().inject(this);
+    if(savedInstanceState == null) {
+      fetchMode = getArguments().getString(ARGS_FETCH_MODE);
+    }else{
+      fetchMode = savedInstanceState.getString(STATE_FILTER_MODE);
+      cacheMode = savedInstanceState.getInt(STATE_CACHE_MODE);
+    }
+    Log.i(TAG, "[FetchMode:" + fetchMode + "][CacheMode:" + cacheMode + "]");
 
-    fetchMode = getArguments().getString(ARGS_FETCH_MODE);
-    Log.i(TAG, "[FetchMode:" + fetchMode + "]");
     presenter.attachView(this);
-    presenter.getStories(fetchMode);
+    presenter.getStories(fetchMode, cacheMode);
+  }
+
+  @Override public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putString(STATE_FILTER_MODE, fetchMode);
+    outState.putInt(STATE_CACHE_MODE, cacheMode);
   }
 
   @Override public void onDestroyView() {
@@ -85,7 +98,7 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
 
   @OnClick({R.id.vError, R.id.vErrorNetwork, R.id.vEmpty})
   public void onClickViewError(){
-    presenter.getStories(fetchMode);
+    presenter.getStories(fetchMode, cacheMode);
   }
 
   @Override public void hideErrorView() {

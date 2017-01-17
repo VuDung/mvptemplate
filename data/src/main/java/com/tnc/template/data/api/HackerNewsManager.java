@@ -26,9 +26,9 @@ import rx.schedulers.Schedulers;
 
 public class HackerNewsManager implements ItemManager {
   public static final String HOST = "hacker-news.firebaseio.com";
-  public static final String BASE_WEB_URL = "https://news.ycombinator.com";
-  public static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
-  static final String BASE_API_URL = "https://" + HOST + "/v0/";
+  private static final String BASE_WEB_URL = "https://news.ycombinator.com";
+  private static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
+  private static final String BASE_API_URL = "https://" + HOST + "/v0/";
 
   private Context context;
   private RestService restService;
@@ -53,7 +53,6 @@ public class HackerNewsManager implements ItemManager {
       return;
     }
     getStoriesObservable(filter, mode)
-        .compose(NetworkConnectionTransformer.create(context))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(
