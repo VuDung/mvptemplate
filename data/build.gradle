@@ -34,7 +34,8 @@ dependencies {
 
   compile libs.dagger
   annotationProcessor libs.daggerCompiler
-
+  compile libs.appCompatV7
+  compile libs.resources
   compile libs.gson
   compile libs.rxJava
   compile libs.rxAndroid

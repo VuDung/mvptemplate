@@ -23,7 +23,9 @@ import com.tnc.template.common.di.Injector;
 import com.tnc.template.common.widget.RadioViewGroupController;
 import com.tnc.template.data.api.ItemManager;
 import com.tnc.template.data.storage.AppPreference;
+import com.tnc.template.data.util.StringUtils;
 import com.tnc.template.main.list.ListStoryFragment;
+import java.util.Locale;
 import javax.inject.Inject;
 
 /**
@@ -88,6 +90,11 @@ public class MainActivity extends BaseActivity implements Injector {
             break;
         }
       }
+
+      @Override public void onDrawerClosed(View drawerView) {
+        super.onDrawerClosed(drawerView);
+        syncState();
+      }
     };
     drawerLayout.addDrawerListener(drawerToggle);
     radioViewGroupController = new RadioViewGroupController();
@@ -98,6 +105,8 @@ public class MainActivity extends BaseActivity implements Injector {
     if (savedInstanceState == null) {
       fetchMode = appPreference.getFetchMode();
       radioViewGroupController.setSelection(0);
+      setTitleToolbarByFetchMode();
+
       getSupportFragmentManager().beginTransaction().replace(
           R.id.container,
           ListStoryFragment.newInstance(fetchMode)).commit();
@@ -127,9 +136,16 @@ public class MainActivity extends BaseActivity implements Injector {
     }
     appPreference.setFetchMode(fetchMode);
     drawerLayout.closeDrawer(svDrawer);
+
+    setTitleToolbarByFetchMode();
     getSupportFragmentManager().beginTransaction().replace(
         R.id.container,
         ListStoryFragment.newInstance(fetchMode)).commit();
+  }
+
+  private void setTitleToolbarByFetchMode() {
+    String title = String.format(Locale.US, getString(R.string.title_story_format), StringUtils.upperCaseFirstCharacter(fetchMode));
+    toolbar.setTitle(title);
   }
 
   @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {

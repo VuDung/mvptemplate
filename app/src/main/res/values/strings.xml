@@ -1,11 +1,16 @@
 <resources>
   <string name="app_name">template</string>
+
   <string name="drawer_open">drawer_open</string>
   <string name="drawer_close">drawer_close</string>
+
   <string name="drawer_show">Show</string>
   <string name="drawer_ask">Ask</string>
   <string name="drawer_top">Top</string>
   <string name="drawer_new">New</string>
   <string name="drawer_job">Job</string>
   <string name="drawer_best">Best</string>
+
+  <string name="title_story_format">%s Story</string>
+  <string name="loading_text">...</string>
 </resources>

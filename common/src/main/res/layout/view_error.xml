@@ -9,7 +9,7 @@
   <ImageView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:src="@drawable/ic_report_problem_black_24dp"/>
+      android:src="@drawable/ic_report_problem_black_100dp"/>
   <TextView
       android:id="@+id/tvErrorMessage"
       android:layout_width="wrap_content"

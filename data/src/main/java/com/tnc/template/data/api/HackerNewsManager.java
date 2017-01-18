@@ -1,6 +1,5 @@
 package com.tnc.template.data.api;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import com.tnc.template.data.api.factory.RestServiceFactory;
 import com.tnc.template.data.api.response.ResponseListener;
@@ -10,8 +9,6 @@ import com.tnc.template.data.entity.UserItem;
 import com.tnc.template.data.storage.FavoriteManager;
 import com.tnc.template.data.storage.SessionManager;
 import com.tnc.template.data.transformer.NetworkConnectionTransformer;
-import javax.inject.Inject;
-import javax.inject.Named;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -27,7 +24,7 @@ import rx.schedulers.Schedulers;
 public class HackerNewsManager implements ItemManager {
   public static final String HOST = "hacker-news.firebaseio.com";
   private static final String BASE_WEB_URL = "https://news.ycombinator.com";
-  private static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
+  public static final String WEB_ITEM_PATH = BASE_WEB_URL + "/item?id=%s";
   private static final String BASE_API_URL = "https://" + HOST + "/v0/";
 
   private Context context;
@@ -82,11 +79,12 @@ public class HackerNewsManager implements ItemManager {
         itemObservable,
         (isViewed, isFavorited, hackerNewsItem)-> {
           if (hackerNewsItem != null) {
-
+            hackerNewsItem.preload();
+            hackerNewsItem.setViewed(isViewed);
+            hackerNewsItem.setFavorite(isFavorited);
           }
           return hackerNewsItem;
         }))
-        .compose(NetworkConnectionTransformer.<Item>create(context))
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(
@@ -126,6 +124,7 @@ public class HackerNewsManager implements ItemManager {
     HackerNewsItem[] items = new HackerNewsItem[ids.length];
     for(int i = 0; i < ids.length; i++){
       HackerNewsItem item = new HackerNewsItem(ids[i]);
+      item.setRank(i + 1);
       items[i] = item;
     }
     return items;

@@ -1,6 +1,7 @@
 package com.tnc.template.main.list;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,8 @@ import com.tnc.template.R;
 import com.tnc.template.common.base.BaseFragment;
 import com.tnc.template.data.api.ItemManager;
 import com.tnc.template.data.entity.Item;
+import com.tnc.template.main.adapter.StoriesAdapter;
+import java.util.Arrays;
 import javax.inject.Inject;
 
 /**
@@ -35,6 +38,8 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
 
   private int cacheMode = ItemManager.MODE_DEFAULT;
   private String fetchMode;
+  private StoriesAdapter storiesAdapter;
+
   private static final String ARGS_FETCH_MODE = "args_fetch_mode";
   private static final String STATE_FILTER_MODE = "state_filter_mode";
   private static final String STATE_CACHE_MODE = "state_cache_mode";
@@ -59,6 +64,11 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
       cacheMode = savedInstanceState.getInt(STATE_CACHE_MODE);
     }
     Log.i(TAG, "[FetchMode:" + fetchMode + "][CacheMode:" + cacheMode + "]");
+    storiesAdapter = new StoriesAdapter();
+    storiesAdapter.attach(getActivity(), rvList);
+    storiesAdapter.setCacheMode(cacheMode);
+    rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    rvList.setAdapter(storiesAdapter);
 
     presenter.attachView(this);
     presenter.getStories(fetchMode, cacheMode);
@@ -136,6 +146,10 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
     hideLoading();
     hideErrorView();
     hideEmptyView();
+    hideErrorNetwork();
+    rvList.setVisibility(View.VISIBLE);
+    storiesAdapter.setItems(Arrays.asList(items));
+
   }
 
 }
