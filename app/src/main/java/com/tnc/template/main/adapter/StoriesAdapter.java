@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LongSparseArray;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
@@ -131,7 +132,9 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
       this.populateItem = populateItem;
     }
     @Override public void onResponse(@Nullable Item data) {
+
       if(ref.get() != null && ref.get().isAttached() && data != null){
+        Log.e("ItemResponseListener", "onResponse[" + data.toString());
         populateItem.populate(data);
         ref.get().onItemLoaded(populateItem);
       }

@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Keep;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -20,6 +23,7 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
+import com.google.gson.annotations.SerializedName;
 import com.tnc.template.data.R;
 import com.tnc.template.data.api.HackerNewsManager;
 import com.tnc.template.data.util.AppUtils;
@@ -29,22 +33,22 @@ import java.util.Locale;
  * Created by CUSDungVT on 1/12/2017.
  */
 
-public class HackerNewsItem implements Item{
+public class HackerNewsItem implements Item {
   private static final String AUTHOR_SEPARATOR = " - ";
-  @Keep private long id 	;//The item's unique id.
-  @Keep private boolean deleted 	;//true if the item is deleted.
-  @Keep private String type 	;//The type of item. One of "job", "story", "comment", "poll", or "pollopt".
-  @Keep private String by 	;//The username of the item's author.
-  @Keep private long time 	;//Creation date of the item, in Unix Time.
-  @Keep private String text 	;//The comment, story or poll text. HTML.
-  @Keep private boolean dead 	;//true if the item is dead.
-  @Keep private long parent 	;//The item's parent. For comments, either another comment or the relevant story. For pollopts, the relevant poll.
-  @Keep private long[] kids 	;//The ids of the item's comments, in ranked display order.
-  @Keep private String url 	;//The URL of the story.
-  @Keep private int score 	;//The story's score, or the votes for a pollopt.
-  @Keep private String title 	;//The title of the story, poll or job.
-  @Keep private long[] parts 	;//A list of related pollopts, in display order.
-  @Keep private int descendants 	;//In the case of stories or polls, the total comment count.
+  @SerializedName("id") long id 	;//The item's unique id.
+  @SerializedName("deleted") boolean deleted 	;//true if the item is deleted.
+  @SerializedName("type") String type 	;//The type of item. One of "job", "story", "comment", "poll", or "pollopt".
+  @SerializedName("by") String by 	;//The username of the item's author.
+  @SerializedName("time") long time 	;//Creation date of the item, in Unix Time.
+  @SerializedName("text") String text 	;//The comment, story or poll text. HTML.
+  @SerializedName("dead") boolean dead 	;//true if the item is dead.
+  @SerializedName("parent") long parent 	;//The item's parent. For comments, either another comment or the relevant story. For pollopts, the relevant poll.
+  @SerializedName("kids") long[] kids 	;//The ids of the item's comments, in ranked display order.
+  @SerializedName("url") String url 	;//The URL of the story.
+  @SerializedName("score") int score 	;//The story's score, or the votes for a pollopt.
+  @SerializedName("title") String title 	;//The title of the story, poll or job.
+  @SerializedName("parts") long[] parts 	;//A list of related pollopts, in display order.
+  @SerializedName("descendants") int descendants 	;//In the case of stories or polls, the total comment count.
 
   private boolean isFavorited;
   private boolean isViewed;
@@ -68,11 +72,12 @@ public class HackerNewsItem implements Item{
   }
 
   @Override public void populate(Item info) {
+    Log.e(TAG, "populate");
     title = info.getTitle();
     time = info.getTime();
     by = info.getBy();
     kids = info.getKids();
-    url = info.getUrl();
+    url = info.getRawUrl();
     text = info.getText();
     type = info.getRawType();
     descendants = info.getDescendants();
@@ -300,9 +305,9 @@ public class HackerNewsItem implements Item{
     return displayedTime;
   }
 
+  @NonNull
   @Override public String getType() {
-    Log.i(TAG, "Type: " + type);
-    return !TextUtils.isEmpty(type) ? type : STORY_TYPE;
+    return (!TextUtils.isEmpty(type) ? type : STORY_TYPE);
   }
 
   @Override public void setFavorite(boolean favorite) {
@@ -329,4 +334,5 @@ public class HackerNewsItem implements Item{
   @Override public String toString() {
     return "[id: " + id + "]\n[type: " + type + "]\n[url: " + url + "]\n[by: " + by + "]";
   }
+
 }

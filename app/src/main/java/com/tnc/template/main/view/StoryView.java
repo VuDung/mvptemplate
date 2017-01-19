@@ -37,32 +37,43 @@ public class StoryView extends LinearLayout {
 
   public StoryView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-
     inflate(context, R.layout.layout_story_view, this);
-    ButterKnife.bind(this, this);
+  }
+
+  @Override protected void onFinishInflate() {
+    super.onFinishInflate();
+    ButterKnife.bind(this);
   }
 
   public void setStory(@NonNull WebItem story) {
     if (story instanceof Item) {
       Item item = (Item) story;
-      tvRank.setText(item.getRank());
-      tvScore.setText(item.getScore());
+      tvRank.setText(String.valueOf(item.getRank()));
+      tvScore.setText(String.valueOf(item.getScore()));
+      tvComment.setVisibility(View.VISIBLE);
+      imgAction.setVisibility(View.VISIBLE);
+      if(item.getKidCount() > 0){
+        tvComment.setText(String.valueOf(item.getKidCount()));
+      }else{
+        tvComment.setText(null);
+      }
+      tvComment.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_chat_black_24dp, 0,0,0);
     }
     tvComment.setVisibility(View.VISIBLE);
     tvTitle.setText(story.getDisplayedTitle());
     tvDisplayTime.setText(story.getDisplayedTitle());
     tvDisplayTime.append(story.getDisplayAuthor(getContext(), false, 0));
-    switch (story.getType()) {
-      case Item.JOB_TYPE:
-        tvSource.setText(null);
-        break;
-      case Item.POLL_TYPE:
-        tvSource.setText(null);
-        break;
-      default:
-        tvSource.setText(story.getSource());
-        break;
-    }
+    //switch (story.getType()) {
+    //  case Item.JOB_TYPE:
+    //    tvSource.setText(null);
+    //    break;
+    //  case Item.POLL_TYPE:
+    //    tvSource.setText(null);
+    //    break;
+    //  default:
+    //    tvSource.setText(story.getSource());
+    //    break;
+    //}
   }
 
   public void reset() {

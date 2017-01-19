@@ -72,7 +72,8 @@
             android:visibility="gone"
             tools:visibility="visible"
             tools:drawableLeft="@drawable/ic_chat_black_24dp"
-            android:drawablePadding="@dimen/padding_normal"
+            android:gravity="center"
+            android:drawablePadding="@dimen/padding_tiny"
             tools:text="123"/>
         <ImageView
             android:id="@+id/imgAction"

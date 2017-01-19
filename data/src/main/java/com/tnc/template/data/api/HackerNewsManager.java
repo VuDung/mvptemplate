@@ -1,6 +1,7 @@
 package com.tnc.template.data.api;
 
 import android.content.Context;
+import android.util.Log;
 import com.tnc.template.data.api.factory.RestServiceFactory;
 import com.tnc.template.data.api.response.ResponseListener;
 import com.tnc.template.data.entity.HackerNewsItem;
@@ -8,7 +9,6 @@ import com.tnc.template.data.entity.Item;
 import com.tnc.template.data.entity.UserItem;
 import com.tnc.template.data.storage.FavoriteManager;
 import com.tnc.template.data.storage.SessionManager;
-import com.tnc.template.data.transformer.NetworkConnectionTransformer;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -31,7 +31,7 @@ public class HackerNewsManager implements ItemManager {
   private RestService restService;
   private SessionManager sessionManager;
   private FavoriteManager favoriteManager;
-
+  private final String TAG = HackerNewsManager.class.getSimpleName();
 
   public HackerNewsManager(
       Context context,
@@ -63,14 +63,15 @@ public class HackerNewsManager implements ItemManager {
     Observable<HackerNewsItem> itemObservable;
     switch (mode){
       case MODE_DEFAULT:
-        default:
+      default:
         itemObservable = restService.itemRx(itemId);
         break;
       case MODE_CACHE:
         itemObservable = restService.cachedItemRx(itemId);
         break;
       case MODE_NETWORK:
-        itemObservable = restService.networkItemRx(itemId);
+        itemObservable = restService.networkItemRx(itemId)
+            .onErrorResumeNext(restService.itemRx(itemId));
         break;
     }
     Observable.defer(()->Observable.zip(
