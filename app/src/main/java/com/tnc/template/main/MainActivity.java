@@ -47,9 +47,10 @@ public class MainActivity extends BaseActivity implements Injector {
       R.id.drawerShow,
       R.id.drawerAsk,
       R.id.drawerJob,
-      R.id.drawerBest})
+      R.id.drawerBest
+  })
   Button[] drawerItems;
-  String[] fetchModes = new String[]{
+  String[] fetchModes = new String[] {
       ItemManager.TOP_FETCH_MODE,
       ItemManager.NEW_FETCH_MODE,
       ItemManager.SHOW_FETCH_MODE,
@@ -57,13 +58,6 @@ public class MainActivity extends BaseActivity implements Injector {
       ItemManager.JOBS_FETCH_MODE,
       ItemManager.BEST_FETCH_MODE
   };
-  //@BindView(R.id.drawerTop) Button drawerTop;
-  //@BindView(R.id.drawerNew) Button drawerNew;
-  //@BindView(R.id.drawerShow) Button drawerShow;
-  //@BindView(R.id.drawerAsk) Button drawerAsk;
-  //@BindView(R.id.drawerJob) Button drawerJob;
-  //@BindView(R.id.drawerBest) Button drawerBest;
-  private RadioViewGroupController radioViewGroupController;
   private ActionBarDrawerToggle drawerToggle;
   private MainComponent mainComponent;
   private String fetchMode;
@@ -76,13 +70,9 @@ public class MainActivity extends BaseActivity implements Injector {
 
   @Override protected void dependencyInjection(Bundle savedInstanceState) {
     mainComponent().inject(this);
-
-
-
-    radioViewGroupController = new RadioViewGroupController();
+    RadioViewGroupController radioViewGroupController = new RadioViewGroupController();
     radioViewGroupController.setViews(drawerItems);
-    radioViewGroupController.setOnCheckedChangeListener((int checkedId, int position) ->{
-      Log.e(TAG, "setOnCheckedChangeListener [position:" + position + "]");
+    radioViewGroupController.setOnCheckedChangeListener((int checkedId, int position) -> {
       fetchMode = fetchModes[position];
       setUpFetchMode();
     });
@@ -90,7 +80,6 @@ public class MainActivity extends BaseActivity implements Injector {
     if (savedInstanceState == null) {
       fetchMode = appPreference.getFetchMode();
       radioViewGroupController.setSelectionAtFirst(findPositionDependOnFetchMode());
-
     }
     setSupportActionBar(toolbar);
     drawerToggle = new ActionBarDrawerToggle(
@@ -100,19 +89,18 @@ public class MainActivity extends BaseActivity implements Injector {
         R.string.drawer_open,
         R.string.drawer_close);
     drawerLayout.addDrawerListener(drawerToggle);
-
   }
 
-  private int findPositionDependOnFetchMode(){
-    for(int i = 0; i < fetchModes.length; i++){
-      if(fetchMode.equals(fetchModes[i])){
+  private int findPositionDependOnFetchMode() {
+    for (int i = 0; i < fetchModes.length; i++) {
+      if (fetchMode.equals(fetchModes[i])) {
         return i;
       }
     }
     return 0;
   }
 
-  private void setUpFetchMode(){
+  private void setUpFetchMode() {
     setTitleToolbarByFetchMode();
     getSupportFragmentManager().beginTransaction().replace(
         R.id.container,
@@ -120,13 +108,13 @@ public class MainActivity extends BaseActivity implements Injector {
 
     appPreference.setFetchMode(fetchMode);
     drawerLayout.closeDrawer(svDrawer);
-
-
   }
 
   private void setTitleToolbarByFetchMode() {
-    Log.e(TAG, "setTitleToolbarByFetchMode");
-    String title = String.format(Locale.US, getString(R.string.title_story_format), StringUtils.upperCaseFirstCharacter(fetchMode));
+    String title = String.format(
+        Locale.US,
+        getString(R.string.title_story_format),
+        StringUtils.upperCaseFirstCharacter(fetchMode));
     toolbar.setTitle(title);
   }
 
