@@ -65,14 +65,16 @@
               style="@style/TextSubTitle"
               android:text="@string/loading_text"/>
         </LinearLayout>
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tvComment"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
             tools:visibility="visible"
+            android:minWidth="72dp"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             tools:drawableLeft="@drawable/ic_chat_black_24dp"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:drawablePadding="@dimen/padding_tiny"
             tools:text="123"/>
         <ImageView

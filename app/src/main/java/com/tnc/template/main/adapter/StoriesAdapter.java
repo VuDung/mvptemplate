@@ -134,7 +134,6 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
     @Override public void onResponse(@Nullable Item data) {
 
       if(ref.get() != null && ref.get().isAttached() && data != null){
-        Log.e("ItemResponseListener", "onResponse[" + data.toString());
         populateItem.populate(data);
         ref.get().onItemLoaded(populateItem);
       }

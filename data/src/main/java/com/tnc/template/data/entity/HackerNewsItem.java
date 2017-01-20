@@ -35,20 +35,20 @@ import java.util.Locale;
 
 public class HackerNewsItem implements Item {
   private static final String AUTHOR_SEPARATOR = " - ";
-  @SerializedName("id") long id 	;//The item's unique id.
-  @SerializedName("deleted") boolean deleted 	;//true if the item is deleted.
-  @SerializedName("type") String type 	;//The type of item. One of "job", "story", "comment", "poll", or "pollopt".
-  @SerializedName("by") String by 	;//The username of the item's author.
-  @SerializedName("time") long time 	;//Creation date of the item, in Unix Time.
-  @SerializedName("text") String text 	;//The comment, story or poll text. HTML.
-  @SerializedName("dead") boolean dead 	;//true if the item is dead.
-  @SerializedName("parent") long parent 	;//The item's parent. For comments, either another comment or the relevant story. For pollopts, the relevant poll.
-  @SerializedName("kids") long[] kids 	;//The ids of the item's comments, in ranked display order.
-  @SerializedName("url") String url 	;//The URL of the story.
-  @SerializedName("score") int score 	;//The story's score, or the votes for a pollopt.
-  @SerializedName("title") String title 	;//The title of the story, poll or job.
-  @SerializedName("parts") long[] parts 	;//A list of related pollopts, in display order.
-  @SerializedName("descendants") int descendants 	;//In the case of stories or polls, the total comment count.
+  private @Keep long id 	;//The item's unique id.
+  private @Keep boolean deleted 	;//true if the item is deleted.
+  private @Keep String type 	;//The type of item. One of "job", "story", "comment", "poll", or "pollopt".
+  private @Keep String by 	;//The username of the item's author.
+  private @Keep long time 	;//Creation date of the item, in Unix Time.
+  private @Keep String text 	;//The comment, story or poll text. HTML.
+  private @Keep boolean dead 	;//true if the item is dead.
+  private @Keep long parent 	;//The item's parent. For comments, either another comment or the relevant story. For pollopts, the relevant poll.
+  private @Keep long[] kids 	;//The ids of the item's comments, in ranked display order.
+  private @Keep String url 	;//The URL of the story.
+  private @Keep int score 	;//The story's score, or the votes for a pollopt.
+  private @Keep String title 	;//The title of the story, poll or job.
+  private @Keep long[] parts 	;//A list of related pollopts, in display order.
+  private @Keep int descendants 	;//In the case of stories or polls, the total comment count.
 
   private boolean isFavorited;
   private boolean isViewed;
@@ -72,7 +72,6 @@ public class HackerNewsItem implements Item {
   }
 
   @Override public void populate(Item info) {
-    Log.e(TAG, "populate");
     title = info.getTitle();
     time = info.getTime();
     by = info.getBy();

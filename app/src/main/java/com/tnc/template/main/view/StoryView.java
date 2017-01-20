@@ -50,6 +50,7 @@ public class StoryView extends LinearLayout {
       Item item = (Item) story;
       tvRank.setText(String.valueOf(item.getRank()));
       tvScore.setText(String.valueOf(item.getScore()));
+      tvScore.append(" pts");
       tvComment.setVisibility(View.VISIBLE);
       imgAction.setVisibility(View.VISIBLE);
       if(item.getKidCount() > 0){

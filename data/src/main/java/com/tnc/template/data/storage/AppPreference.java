@@ -22,7 +22,7 @@ public class AppPreference {
     return preferenceUtils.getStringPreference(context.getString(R.string.pref_fetch_mode), ItemManager.TOP_FETCH_MODE);
   }
 
-  public void setFetchMode(@ItemManager.FetchMode String fetchMode){
+  public void setFetchMode(String fetchMode){
     preferenceUtils.setStringPrefenence(context.getString(R.string.pref_fetch_mode), fetchMode);
   }
 }
