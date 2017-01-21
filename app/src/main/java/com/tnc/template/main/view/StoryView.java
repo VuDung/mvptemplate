@@ -9,7 +9,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.tnc.template.R;
+import com.tnc.template.common.widget.IconButton;
 import com.tnc.template.data.entity.Item;
 import com.tnc.template.data.entity.WebItem;
 
@@ -19,13 +21,14 @@ import com.tnc.template.data.entity.WebItem;
 
 public class StoryView extends LinearLayout {
 
+  @BindView(R.id.imgBookmarked) ImageView imgBookmarked;
   @BindView(R.id.tvTitle) TextView tvTitle;
   @BindView(R.id.tvSource) TextView tvSource;
   @BindView(R.id.tvDisplayTime) TextView tvDisplayTime;
   @BindView(R.id.tvComment) TextView tvComment;
-  @BindView(R.id.imgAction) ImageView imgAction;
   @BindView(R.id.tvRank) TextView tvRank;
   @BindView(R.id.tvScore) TextView tvScore;
+  @BindView(R.id.imgAction) IconButton imgAction;
 
   public StoryView(Context context) {
     this(context, null);
@@ -48,6 +51,7 @@ public class StoryView extends LinearLayout {
   public void setStory(@NonNull WebItem story) {
     if (story instanceof Item) {
       Item item = (Item) story;
+      imgBookmarked.setVisibility(item.isFavorite() ? View.VISIBLE : View.GONE);
       tvRank.setText(String.valueOf(item.getRank()));
       tvScore.setText(String.valueOf(item.getScore()));
       tvScore.append(" pts");
@@ -76,6 +80,12 @@ public class StoryView extends LinearLayout {
     //    break;
     //}
   }
+
+  public IconButton getImageAction(){
+    return imgAction;
+  }
+
+
 
   public void reset() {
     tvTitle.setText(getResources().getString(R.string.loading_text));

@@ -1,20 +1,29 @@
 package com.tnc.template.main.adapter;
 
 import android.content.Context;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.util.LongSparseArray;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.tnc.template.R;
 import com.tnc.template.TemplateApplication;
+import com.tnc.template.common.widget.PopupMenu;
 import com.tnc.template.data.DataModule;
 import com.tnc.template.data.api.ItemManager;
 import com.tnc.template.data.api.response.ResponseListener;
 import com.tnc.template.data.entity.Item;
+import com.tnc.template.data.storage.FavoriteManager;
+import com.tnc.template.data.storage.SessionManager;
+import com.tnc.template.data.storage.TemplateProvider;
 import com.tnc.template.main.MainComponent;
 import com.tnc.template.main.MainModule;
 import com.tnc.template.main.view.StoryView;
@@ -34,6 +43,27 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
   private MainComponent mainComponent;
   private int cacheMode = ItemManager.MODE_DEFAULT;
   @Inject @Named(DataModule.HN) ItemManager hackerNewsManager;
+  @Inject FavoriteManager favoriteManager;
+  @Inject SessionManager sessionManager;
+  @Inject PopupMenu popupMenu;
+  private final String TAG = StoriesAdapter.class.getSimpleName();
+  private ContentObserver observer = new ContentObserver(new Handler()) {
+    @Override public void onChange(boolean selfChange, Uri uri) {
+      //super.onChange(selfChange, uri);
+      Integer position = itemPositions.get(Long.valueOf(uri.getLastPathSegment()));
+      Log.e(TAG, "ContentObserver onChange: [Uri: " + uri.toString() + "][Position: " + position);
+      if(position == null){
+        return;
+      }
+      Item item = items.get(position);
+      if(FavoriteManager.isAdded(uri)){
+        item.setFavorite(true);
+      }else if(FavoriteManager.isRemoved(uri)){
+        item.setFavorite(false);
+      }
+      notifyItemChanged(position);
+    }
+  };
 
   private MainComponent mainComponent() {
     if (mainComponent == null) {
@@ -45,11 +75,18 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
   public void setCacheMode(int cacheMode){
     this.cacheMode = cacheMode;
   }
+
   @Override public void attach(Context context, RecyclerView recyclerView) {
     super.attach(context, recyclerView);
     mainComponent().inject(this);
+    context.getContentResolver().registerContentObserver(TemplateProvider.URI_FAVORITE, true, observer);
+    context.getContentResolver().registerContentObserver(TemplateProvider.URI_VIEWED, true, observer);
   }
 
+  @Override public void detach() {
+    super.detach();
+    getContext().getContentResolver().unregisterContentObserver(observer);
+  }
 
   @Override
   public StoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -63,6 +100,42 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
       return;
     }
     holder.bind(item);
+    holder.storyView.getImageAction().setOnClickListener((View v)->
+      showMoreAction(v, item, holder)
+    );
+  }
+
+  private void showMoreAction(View anchor, Item story, StoryViewHolder viewHolder){
+    popupMenu.create(getContext(), anchor, Gravity.NO_GRAVITY)
+        .inflate(R.menu.menu_contextual_story)
+        .setMenuItemTitle(R.id.menu_save, story.isFavorite() ? "UnSave" : "Save")
+        .setOnMenuItemClickListener((MenuItem menuItem) ->{
+          if(menuItem.getItemId() == R.id.menu_save){
+            toggleSave(story);
+            return true;
+          }
+          if(menuItem.getItemId() == R.id.menu_comment){
+            showComment(story);
+            return true;
+          }
+          return false;
+
+        })
+        .show();
+  }
+
+  private void toggleSave(Item story){
+    Log.e(TAG, "toggleSave isFavorite: "+ story.isFavorite());
+    if(story.isFavorite()){
+      //unsave
+      favoriteManager.remove(getContext(), story.getItemId());
+    }else{
+      //save
+      favoriteManager.add(getContext(), story);
+    }
+  }
+  private void showComment(Item story){
+
   }
 
   private void loadItemDetailAtPosition(int position){
@@ -112,13 +185,12 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
 
   static class StoryViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.storyView) StoryView storyView;
-    public StoryViewHolder(View itemView) {
+    StoryViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
-
     }
 
-    public void bind(Item item){
+    void bind(Item item){
       storyView.setStory(item);
     }
   }
