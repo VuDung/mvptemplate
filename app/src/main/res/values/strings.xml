@@ -11,6 +11,6 @@
   <string name="drawer_job">Job</string>
   <string name="drawer_best">Best</string>
 
-  <string name="title_story_format">%s Story</string>
+  <string name="title_story_format">%s Stories</string>
   <string name="loading_text">...</string>
 </resources>

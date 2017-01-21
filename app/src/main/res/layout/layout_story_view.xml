@@ -90,7 +90,7 @@
             tools:visibility="visible"
             android:minWidth="72dp"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            tools:drawableLeft="@drawable/ic_chat_black_24dp"
+            tools:drawableLeft="@drawable/ic_chat_red_a200_24dp"
             android:gravity="center_vertical"
             android:drawablePadding="@dimen/padding_tiny"
             tools:text="123"/>

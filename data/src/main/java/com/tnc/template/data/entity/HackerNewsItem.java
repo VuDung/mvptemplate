@@ -55,7 +55,6 @@ public class HackerNewsItem implements Item {
   private int localRevision = -1;
   private int level;
   private int rank;
-  private int defaultColor;
   private long next, previous;
   private HackerNewsItem[] kidItems;
   private Spannable displayedTime;
@@ -242,7 +241,7 @@ public class HackerNewsItem implements Item {
   }
 
   @Override public Spannable getDisplayAuthor(Context context, boolean isHyperLink, int color) {
-    defaultColor = ContextCompat.getColor(context, R.color.colorPrimary);
+    int defaultColor = ContextCompat.getColor(context, R.color.colorPrimary);
     if(disPlayedAuthor == null){
       if(TextUtils.isEmpty(by)){
         disPlayedAuthor = new SpannableString("");
@@ -306,6 +305,7 @@ public class HackerNewsItem implements Item {
 
   @NonNull
   @Override public String getType() {
+    Log.e(TAG, "Type " + type);
     return (!TextUtils.isEmpty(type) ? type : STORY_TYPE);
   }
 

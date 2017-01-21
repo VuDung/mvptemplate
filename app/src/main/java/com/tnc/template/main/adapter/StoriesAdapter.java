@@ -42,6 +42,7 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
   private LongSparseArray<Integer> itemPositions = new LongSparseArray<>();
   private MainComponent mainComponent;
   private int cacheMode = ItemManager.MODE_DEFAULT;
+  private int hotThresHold = Integer.MAX_VALUE;
   @Inject @Named(DataModule.HN) ItemManager hackerNewsManager;
   @Inject FavoriteManager favoriteManager;
   @Inject SessionManager sessionManager;
@@ -99,10 +100,14 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
       loadItemDetailAtPosition(holder.getAdapterPosition());
       return;
     }
-    holder.bind(item);
+    holder.bind(item, hotThresHold);
     holder.storyView.getImageAction().setOnClickListener((View v)->
       showMoreAction(v, item, holder)
     );
+  }
+
+  public void setHotThresHold(int hotThresHold){
+    this.hotThresHold = hotThresHold;
   }
 
   private void showMoreAction(View anchor, Item story, StoryViewHolder viewHolder){
@@ -190,8 +195,8 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
       ButterKnife.bind(this, itemView);
     }
 
-    void bind(Item item){
-      storyView.setStory(item);
+    void bind(Item item, int hotThresHold){
+      storyView.setStory(item, hotThresHold);
     }
   }
 

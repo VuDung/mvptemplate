@@ -24,7 +24,10 @@ public class AppUtils {
   private static final String ABBR_MINUTE = "m";
 
   private static final String HOST_USER = "user";
-
+  public static final int HOT_FACTOR = 3;
+  public static final int HOT_THRESHOLD_HIGH = 300;
+  public static final int HOT_THRESHOLD_NORMAL = 100;
+  public static final int HOT_THRESHOLD_LOW = 10;
   public static String getAbbreviatedTimeSpan(long timeMillis) {
     long span = Math.max(System.currentTimeMillis() - timeMillis, 0);
     if (span >= DateUtils.YEAR_IN_MILLIS) {

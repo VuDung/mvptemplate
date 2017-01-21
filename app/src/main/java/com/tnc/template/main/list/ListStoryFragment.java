@@ -18,6 +18,7 @@ import com.tnc.template.R;
 import com.tnc.template.common.base.BaseFragment;
 import com.tnc.template.data.api.ItemManager;
 import com.tnc.template.data.entity.Item;
+import com.tnc.template.data.util.AppUtils;
 import com.tnc.template.main.adapter.StoriesAdapter;
 import java.util.Arrays;
 import javax.inject.Inject;
@@ -67,6 +68,14 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
     storiesAdapter = new StoriesAdapter();
     storiesAdapter.attach(getActivity(), rvList);
     storiesAdapter.setCacheMode(cacheMode);
+    storiesAdapter.setHotThresHold(AppUtils.HOT_THRESHOLD_NORMAL);
+    switch (fetchMode){
+      case ItemManager.BEST_FETCH_MODE:
+        storiesAdapter.setHotThresHold(AppUtils.HOT_THRESHOLD_HIGH);
+        break;
+      case ItemManager.NEW_FETCH_MODE:
+        storiesAdapter.setHotThresHold(AppUtils.HOT_THRESHOLD_LOW);
+    }
     rvList.setLayoutManager(new LinearLayoutManager(getActivity()));
     rvList.setAdapter(storiesAdapter);
 
