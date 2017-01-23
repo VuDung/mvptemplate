@@ -61,12 +61,13 @@ public class HackerNewsItem implements Item {
   private Spannable disPlayedAuthor;
   private CharSequence displayedText;
   private final String TAG = HackerNewsItem.class.getSimpleName();
+
   public HackerNewsItem(long id) {
     this.id = id;
   }
 
-  public HackerNewsItem(long id, int level){
-    this.id = id;
+  private HackerNewsItem(long id, int level){
+    this(id);
     this.level = level;
   }
 
@@ -140,11 +141,8 @@ public class HackerNewsItem implements Item {
     switch (getType()){
       case COMMENT_TYPE:
         return text;
-      case JOB_TYPE:
-      case STORY_TYPE:
-      case POLL_TYPE:
       default:
-          return title;
+        return title;
     }
   }
 
@@ -193,9 +191,6 @@ public class HackerNewsItem implements Item {
     switch (getType()) {
       case COMMENT_TYPE:
         return text;
-      case JOB_TYPE:
-      case STORY_TYPE:
-      case POLL_TYPE: // TODO poll need to display options
       default:
         return title;
     }
@@ -203,12 +198,10 @@ public class HackerNewsItem implements Item {
 
   @Override public String getUrl() {
     switch (getType()){
-      case JOB_TYPE:
-      case POLL_TYPE:
       case COMMENT_TYPE:
         return getItemUrl(getItemId());
       default:
-        return TextUtils.isEmpty(getUrl()) ? getItemUrl(getItemId()) : url;
+        return TextUtils.isEmpty(url) ? getItemUrl(getItemId()) : url;
     }
   }
 
@@ -226,13 +219,10 @@ public class HackerNewsItem implements Item {
 
   @Override public boolean isStoryType() {
     switch (getType()) {
-      case STORY_TYPE:
-      case POLL_TYPE:
-      case JOB_TYPE:
-        return true;
       case COMMENT_TYPE:
-      default:
         return false;
+      default:
+        return true;
     }
   }
 
@@ -305,7 +295,6 @@ public class HackerNewsItem implements Item {
 
   @NonNull
   @Override public String getType() {
-    Log.e(TAG, "Type " + type);
     return (!TextUtils.isEmpty(type) ? type : STORY_TYPE);
   }
 
