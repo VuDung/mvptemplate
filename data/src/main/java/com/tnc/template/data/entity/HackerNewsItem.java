@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -29,7 +31,7 @@ import java.util.Locale;
  * Created by CUSDungVT on 1/12/2017.
  */
 
-public class HackerNewsItem implements Item {
+public class HackerNewsItem implements Item, Parcelable {
   private static final String AUTHOR_SEPARATOR = " - ";
   private @Keep long id 	;//The item's unique id.
   private @Keep boolean deleted 	;//true if the item is deleted.
@@ -319,4 +321,66 @@ public class HackerNewsItem implements Item {
     return "[id: " + id + "]\n[type: " + type + "]\n[url: " + url + "]\n[by: " + by + "]";
   }
 
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(Parcel dest, int flags) {
+    dest.writeLong(this.id);
+    dest.writeByte(this.deleted ? (byte) 1 : (byte) 0);
+    dest.writeString(this.type);
+    dest.writeString(this.by);
+    dest.writeLong(this.time);
+    dest.writeString(this.text);
+    dest.writeByte(this.dead ? (byte) 1 : (byte) 0);
+    dest.writeLong(this.parent);
+    dest.writeLongArray(this.kids);
+    dest.writeString(this.url);
+    dest.writeInt(this.score);
+    dest.writeString(this.title);
+    //dest.writeLongArray(this.parts);
+    dest.writeInt(this.descendants);
+    dest.writeByte(this.isFavorited ? (byte) 1 : (byte) 0);
+    dest.writeByte(this.isViewed ? (byte) 1 : (byte) 0);
+    dest.writeInt(this.localRevision);
+    dest.writeInt(this.level);
+    dest.writeInt(this.rank);
+    dest.writeLong(this.next);
+    dest.writeLong(this.previous);
+  }
+
+  protected HackerNewsItem(Parcel in) {
+    this.id = in.readLong();
+    this.deleted = in.readByte() != 0;
+    this.type = in.readString();
+    this.by = in.readString();
+    this.time = in.readLong();
+    this.text = in.readString();
+    this.dead = in.readByte() != 0;
+    this.parent = in.readLong();
+    this.kids = in.createLongArray();
+    this.url = in.readString();
+    this.score = in.readInt();
+    this.title = in.readString();
+    //this.parts = in.createLongArray();
+    this.descendants = in.readInt();
+    this.isFavorited = in.readByte() != 0;
+    this.isViewed = in.readByte() != 0;
+    this.localRevision = in.readInt();
+    this.level = in.readInt();
+    this.rank = in.readInt();
+    this.next = in.readLong();
+    this.previous = in.readLong();
+  }
+
+  public static final Parcelable.Creator<HackerNewsItem> CREATOR =
+      new Parcelable.Creator<HackerNewsItem>() {
+        @Override public HackerNewsItem createFromParcel(Parcel source) {
+          return new HackerNewsItem(source);
+        }
+
+        @Override public HackerNewsItem[] newArray(int size) {
+          return new HackerNewsItem[size];
+        }
+      };
 }
