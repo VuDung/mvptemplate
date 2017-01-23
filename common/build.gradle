@@ -26,9 +26,8 @@ dependencies {
 
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
-  compile libs.appCompatV7
+
   compile libs.data
-  compile libs.resources
   compile libs.butterKnife
   compile libs.dagger
   annotationProcessor libs.daggerCompiler

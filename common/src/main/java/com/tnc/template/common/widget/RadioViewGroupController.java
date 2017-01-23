@@ -13,7 +13,7 @@ public class RadioViewGroupController implements View.OnClickListener {
     private int selectedIndex;
     private OnCheckedChangeListener onCheckedChangeListener;
 
-    public void setRadioButtons(View... buttons) {
+    public void setViews(View[] buttons) {
         if (buttons == null || buttons.length == 0) {
             return;
         }
@@ -34,37 +34,24 @@ public class RadioViewGroupController implements View.OnClickListener {
         }, 1000);
     }
 
-
-    @Override
-    public void onClick(View v) {
-        setSelection(v);
-    }
-
     public void setSelection(int position) {
         if (radioButtons == null || radioButtons.length <= position || position < 0) {
             return;
         }
-        setSelection((radioButtons[position]));
+        setSelection(radioButtons[position], false);
     }
 
-    public int getCheckedRadioButtonId() {
-        return (radioButtons[selectedIndex]).getId();
-    }
-
-    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
-        this.onCheckedChangeListener = onCheckedChangeListener;
-    }
-
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(int checkedId, int position);
-    }
-
-
-    private void setSelection(View v) {
-        if (v == radioButtons[selectedIndex]) {
+    public void setSelectionAtFirst(int position){
+        if (radioButtons == null || radioButtons.length <= position || position < 0) {
             return;
         }
+        setSelection(radioButtons[position], true);
+    }
 
+    private void setSelection(View v, boolean isFirst) {
+        if (v == radioButtons[selectedIndex] && !isFirst) {
+            return;
+        }
         v.setSelected(true);
         if (selectedIndex >= 0) {
             radioButtons[selectedIndex].setSelected(false);
@@ -74,4 +61,23 @@ public class RadioViewGroupController implements View.OnClickListener {
             onCheckedChangeListener.onCheckedChanged(v.getId(), selectedIndex);
         }
     }
+
+    public int getCheckedViewId() {
+        return radioButtons[selectedIndex].getId();
+    }
+
+    public void setOnCheckedChangeListener(OnCheckedChangeListener onCheckedChangeListener) {
+        this.onCheckedChangeListener = onCheckedChangeListener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        setSelection(v, false);
+    }
+
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(int checkedId, int position);
+    }
+
+
 }

@@ -3,6 +3,7 @@ package com.tnc.template;
 import android.app.Application;
 import android.content.Context;
 import com.tnc.template.common.navigator.Navigator;
+import com.tnc.template.common.widget.PopupMenu;
 import com.tnc.template.data.Network;
 import com.tnc.template.data.storage.AppPreference;
 import dagger.Module;
@@ -49,6 +50,12 @@ public class AppModule {
   @Provides
   AppPreference provideAppPreference(){
     return new AppPreference(application);
+  }
+
+  @Singleton
+  @Provides
+  PopupMenu providePopMenu(){
+    return new PopupMenu.Implement();
   }
 
 }

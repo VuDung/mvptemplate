@@ -1,9 +1,13 @@
 package com.tnc.template.main;
 
+import com.tnc.template.data.DataModule;
 import com.tnc.template.data.api.HackerNewsManager;
+import com.tnc.template.data.api.ItemManager;
+import com.tnc.template.main.adapter.StoriesAdapter;
 import com.tnc.template.main.list.ListStoryPresenter;
 import dagger.Module;
 import dagger.Provides;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 /**
@@ -14,7 +18,8 @@ import javax.inject.Singleton;
 public class MainModule {
 
   @Provides
-  ListStoryPresenter provideListStoryPresenter(HackerNewsManager hackerNewsManager){
+  ListStoryPresenter provideListStoryPresenter(@Named(DataModule.HN) ItemManager hackerNewsManager){
     return new ListStoryPresenter(hackerNewsManager);
   }
+
 }

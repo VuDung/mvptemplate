@@ -69,7 +69,7 @@ dependencies {
   compile libs.supportDesign
 
   compile libs.common
-  compile libs.resources
+  compile libs.cardView
   compile libs.dagger
   annotationProcessor libs.daggerCompiler
 

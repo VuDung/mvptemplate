@@ -83,7 +83,8 @@ public class NetworkModule {
   }
 
   private static class LoggingInterceptor implements Interceptor {
-    private final Interceptor debugLoggingInterceptor = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+    private final Interceptor debugLoggingInterceptor = new HttpLoggingInterceptor().setLevel(
+        BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE);
     @Override public Response intercept(Chain chain) throws IOException {
       return debugLoggingInterceptor.intercept(chain);
     }

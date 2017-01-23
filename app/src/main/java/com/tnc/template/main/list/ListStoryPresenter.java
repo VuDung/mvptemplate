@@ -14,9 +14,9 @@ import java.lang.ref.WeakReference;
  */
 
 public class ListStoryPresenter extends MvpPresenter<ListStoryView>{
-  private HackerNewsManager hackerNewsManager;
+  private ItemManager hackerNewsManager;
 
-  public ListStoryPresenter(HackerNewsManager hackerNewsManager){
+  public ListStoryPresenter(ItemManager hackerNewsManager){
     this.hackerNewsManager = hackerNewsManager;
   }
 
@@ -61,6 +61,7 @@ public class ListStoryPresenter extends MvpPresenter<ListStoryView>{
 
     @Override public void onError(Throwable throwable) {
       if(ref.get() != null && ref.get().isAttached()){
+        throwable.printStackTrace();
         ref.get().onFailedItemLoad(throwable);
       }
     }

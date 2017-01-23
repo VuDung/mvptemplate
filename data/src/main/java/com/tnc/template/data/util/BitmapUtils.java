@@ -15,8 +15,8 @@ import java.io.IOException;
  * Created by Giang Nguyen on 12/5/16.
  */
 
-public class BitmapUtil {
-  private BitmapUtil() {
+public class BitmapUtils {
+  private BitmapUtils() {
     //no instance
   }
 

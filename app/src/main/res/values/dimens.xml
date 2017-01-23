@@ -3,4 +3,10 @@
   <dimen name="drawer_item_height">50dp</dimen>
   <dimen name="drawer_view_selected_width">5dp</dimen>
   <dimen name="divider_height">1px</dimen>
+
+  <dimen name="padding_tiny">3dp</dimen>
+  <dimen name="padding_small">5dp</dimen>
+  <dimen name="padding_normal">8dp</dimen>
+  <dimen name="padding_medium">10dp</dimen>
+  <dimen name="padding_big">12dp</dimen>
 </resources>
