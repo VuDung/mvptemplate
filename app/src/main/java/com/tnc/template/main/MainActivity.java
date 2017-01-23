@@ -23,7 +23,9 @@ import com.tnc.template.common.base.BaseActivity;
 import com.tnc.template.common.di.Injector;
 import com.tnc.template.common.widget.RadioViewGroupController;
 import com.tnc.template.data.api.ItemManager;
+import com.tnc.template.data.entity.WebItem;
 import com.tnc.template.data.storage.AppPreference;
+import com.tnc.template.data.storage.SessionManager;
 import com.tnc.template.data.util.StringUtils;
 import com.tnc.template.main.list.ListStoryFragment;
 import java.util.List;
@@ -34,7 +36,7 @@ import javax.inject.Inject;
  * Created by CUSDungVT on 1/10/2017.
  */
 
-public class MainActivity extends BaseActivity implements Injector {
+public class MainActivity extends BaseActivity implements Injector, ItemListener {
 
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.container) FrameLayout container;
@@ -62,6 +64,7 @@ public class MainActivity extends BaseActivity implements Injector {
   private MainComponent mainComponent;
   private String fetchMode;
   @Inject AppPreference appPreference;
+  @Inject SessionManager sessionManager;
   private final String TAG = MainActivity.class.getSimpleName();
 
   @Override protected int layoutRes() {
@@ -121,6 +124,10 @@ public class MainActivity extends BaseActivity implements Injector {
   @Override protected void onPostCreate(@Nullable Bundle savedInstanceState) {
     super.onPostCreate(savedInstanceState);
     drawerToggle.syncState();
+  }
+
+  @Override public void onItemSelected(WebItem item) {
+    sessionManager.view(this, item.getItemId());
   }
 
   @Override public void onConfigurationChanged(Configuration newConfig) {

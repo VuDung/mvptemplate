@@ -24,6 +24,7 @@ import com.tnc.template.data.entity.Item;
 import com.tnc.template.data.storage.FavoriteManager;
 import com.tnc.template.data.storage.SessionManager;
 import com.tnc.template.data.storage.TemplateProvider;
+import com.tnc.template.main.ItemListener;
 import com.tnc.template.main.MainComponent;
 import com.tnc.template.main.MainModule;
 import com.tnc.template.main.view.StoryView;
@@ -43,6 +44,7 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
   private MainComponent mainComponent;
   private int cacheMode = ItemManager.MODE_DEFAULT;
   private int hotThresHold = Integer.MAX_VALUE;
+  private ItemListener itemListener;
   @Inject @Named(DataModule.HN) ItemManager hackerNewsManager;
   @Inject FavoriteManager favoriteManager;
   @Inject SessionManager sessionManager;
@@ -61,6 +63,8 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
         item.setFavorite(true);
       }else if(FavoriteManager.isRemoved(uri)){
         item.setFavorite(false);
+      }else{
+        item.setViewed(true);
       }
       notifyItemChanged(position);
     }
@@ -82,11 +86,13 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
     mainComponent().inject(this);
     context.getContentResolver().registerContentObserver(TemplateProvider.URI_FAVORITE, true, observer);
     context.getContentResolver().registerContentObserver(TemplateProvider.URI_VIEWED, true, observer);
+    itemListener = (ItemListener)context;
   }
 
   @Override public void detach() {
     super.detach();
     getContext().getContentResolver().unregisterContentObserver(observer);
+    itemListener = null;
   }
 
   @Override
@@ -104,6 +110,16 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
     holder.storyView.getImageAction().setOnClickListener((View v)->
       showMoreAction(v, item, holder)
     );
+    holder.storyView.setOnLongClickListener((View v) -> {
+        showMoreAction(v, item, holder);
+        return true;
+
+    });
+    holder.storyView.setOnClickListener((View view) -> {
+        if(itemListener != null){
+          itemListener.onItemSelected(item);
+        }
+    });
   }
 
   public void setHotThresHold(int hotThresHold){

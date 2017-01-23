@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,7 +31,7 @@ public class StoryView extends LinearLayout {
   @BindView(R.id.tvRank) TextView tvRank;
   @BindView(R.id.tvScore) TextView tvScore;
   @BindView(R.id.imgAction) IconButton imgAction;
-
+  private final String TAG = StoryView.class.getSimpleName();
   public StoryView(Context context) {
     this(context, null);
   }
@@ -53,8 +54,10 @@ public class StoryView extends LinearLayout {
     if (story instanceof Item) {
       Item item = (Item) story;
       boolean isHot = item.getScore() >= hotThresHold * AppUtils.HOT_FACTOR;
+      int colorTitle = ContextCompat.getColor(getContext(), item.isViewed() ? R.color.grey800 : R.color.blackT87);
       int colorScore = ContextCompat.getColor(getContext(), isHot ? R.color.orange500 : R.color.grey500);
       int colorComment = ContextCompat.getColor(getContext(), isHot ? R.color.orange500 : R.color.redA200);
+      tvTitle.setTextColor(colorTitle);
       imgBookmarked.setVisibility(item.isFavorite() ? View.VISIBLE : View.GONE);
       tvRank.setText(String.valueOf(item.getRank()));
       tvScore.setText(String.valueOf(item.getScore()));
@@ -77,6 +80,8 @@ public class StoryView extends LinearLayout {
     tvTitle.setText(story.getDisplayedTitle());
     tvDisplayTime.setText(story.getDisplayedTitle());
     tvDisplayTime.append(story.getDisplayAuthor(getContext(), false, 0));
+
+
 
     switch (story.getType()) {
       case Item.JOB_TYPE:

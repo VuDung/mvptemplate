@@ -81,6 +81,7 @@ public class HackerNewsManager implements ItemManager {
         (isViewed, isFavorited, hackerNewsItem)-> {
           if (hackerNewsItem != null) {
             hackerNewsItem.preload();
+            Log.i(TAG, "isViewed: " + isViewed);
             hackerNewsItem.setViewed(isViewed);
             hackerNewsItem.setFavorite(isFavorited);
           }
