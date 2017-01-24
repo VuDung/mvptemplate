@@ -1,6 +1,7 @@
 package com.tnc.template.data.entity;
 
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.StringDef;
 import android.text.Spannable;
 import java.lang.annotation.Retention;
@@ -10,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by CUSDungVT on 1/12/2017.
  */
 
-public interface WebItem {
+public interface WebItem extends Parcelable{
   String JOB_TYPE = "job";
   String STORY_TYPE = "story";
   String COMMENT_TYPE = "comment";

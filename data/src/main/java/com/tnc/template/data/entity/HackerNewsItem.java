@@ -31,7 +31,7 @@ import java.util.Locale;
  * Created by CUSDungVT on 1/12/2017.
  */
 
-public class HackerNewsItem implements Item, Parcelable {
+public class HackerNewsItem implements Item{
   private static final String AUTHOR_SEPARATOR = " - ";
   private @Keep long id 	;//The item's unique id.
   private @Keep boolean deleted 	;//true if the item is deleted.

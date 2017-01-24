@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import com.tnc.template.common.navigator.Navigator;
+import com.tnc.template.data.entity.WebItem;
+import com.tnc.template.detail.ItemDetailActivity;
 import com.tnc.template.main.MainActivity;
 
 /**
@@ -14,5 +16,9 @@ public class NavigatorImplement implements Navigator{
 
   @NonNull @Override public Intent goToMainActivity(Context context) {
     return new Intent(context, MainActivity.class);
+  }
+
+  @Override public void goToItemDetailActivity(Context context, WebItem item) {
+    ItemDetailActivity.start(context, item);
   }
 }
