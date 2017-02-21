@@ -10,7 +10,8 @@ import com.tnc.template.data.entity.WebItem;
  */
 
 public interface Navigator {
+
   @NonNull Intent goToMainActivity(Context context);
 
-  void goToItemDetailActivity(Context context, WebItem item);
+  void goToItemDetailActivity(Context context, WebItem item, int cacheMode);
 }

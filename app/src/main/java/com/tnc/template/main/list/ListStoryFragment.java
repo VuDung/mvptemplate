@@ -64,6 +64,7 @@ public class ListStoryFragment extends BaseFragment implements ListStoryView {
       fetchMode = savedInstanceState.getString(STATE_FILTER_MODE);
       cacheMode = savedInstanceState.getInt(STATE_CACHE_MODE);
     }
+
     Log.i(TAG, "[FetchMode:" + fetchMode + "][CacheMode:" + cacheMode + "]");
     storiesAdapter = new StoriesAdapter();
     storiesAdapter.attach(getActivity(), rvList);

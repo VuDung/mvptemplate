@@ -2,6 +2,7 @@ package com.tnc.template.data.entity;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Parcel;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -79,4 +80,34 @@ public class Favorite implements WebItem{
   public long getTime(){
     return time;
   }
+
+  @Override public int describeContents() {
+    return 0;
+  }
+
+  @Override public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(this.itemId);
+    dest.writeString(this.url);
+    dest.writeString(this.title);
+    dest.writeLong(this.time);
+    dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
+  }
+
+  protected Favorite(Parcel in) {
+    this.itemId = in.readString();
+    this.url = in.readString();
+    this.title = in.readString();
+    this.time = in.readLong();
+    this.isFavorite = in.readByte() != 0;
+  }
+
+  public static final Creator<Favorite> CREATOR = new Creator<Favorite>() {
+    @Override public Favorite createFromParcel(Parcel source) {
+      return new Favorite(source);
+    }
+
+    @Override public Favorite[] newArray(int size) {
+      return new Favorite[size];
+    }
+  };
 }

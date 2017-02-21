@@ -18,7 +18,7 @@ public class NavigatorImplement implements Navigator{
     return new Intent(context, MainActivity.class);
   }
 
-  @Override public void goToItemDetailActivity(Context context, WebItem item) {
-    ItemDetailActivity.start(context, item);
+  @Override public void goToItemDetailActivity(Context context, WebItem item, int cacheMode) {
+    ItemDetailActivity.start(context, item, cacheMode);
   }
 }

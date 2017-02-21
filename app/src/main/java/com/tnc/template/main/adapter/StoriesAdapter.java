@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.tnc.template.R;
 import com.tnc.template.TemplateApplication;
+import com.tnc.template.common.RecyclerViewAdapter;
 import com.tnc.template.common.widget.PopupMenu;
 import com.tnc.template.data.DataModule;
 import com.tnc.template.data.api.ItemManager;
@@ -38,7 +39,7 @@ import javax.inject.Named;
  * Created by CUSDungVT on 1/17/2017.
  */
 
-public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryViewHolder>{
+public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryViewHolder> {
   private List<Item> items = new ArrayList<>();
   private LongSparseArray<Integer> itemPositions = new LongSparseArray<>();
   private MainComponent mainComponent;
@@ -117,7 +118,7 @@ public class StoriesAdapter extends RecyclerViewAdapter<StoriesAdapter.StoryView
     });
     holder.storyView.setOnClickListener((View view) -> {
         if(itemListener != null){
-          itemListener.onItemSelected(item);
+          itemListener.onItemSelected(item, getCacheMode());
         }
     });
   }

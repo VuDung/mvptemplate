@@ -7,5 +7,5 @@ import com.tnc.template.data.entity.WebItem;
  */
 
 public interface ItemListener {
-  void onItemSelected(WebItem item);
+  void onItemSelected(WebItem item, int cacheMode);
 }

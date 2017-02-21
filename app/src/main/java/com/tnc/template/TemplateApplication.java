@@ -2,6 +2,7 @@ package com.tnc.template;
 
 import com.tnc.template.common.TheApp;
 import com.tnc.template.data.DataModule;
+import com.tnc.template.detail.ItemDetailModule;
 import com.tnc.template.login.LoginModule;
 import com.tnc.template.main.MainModule;
 import com.tnc.template.splash.SplashActivity;
@@ -34,6 +35,9 @@ public class TemplateApplication extends TheApp{
     }
     if(module instanceof MainModule){
       return (T)appComponent.plus((MainModule)module);
+    }
+    if(module instanceof ItemDetailModule){
+      return(T)appComponent.plus((ItemDetailModule)module);
     }
     return null;
   }

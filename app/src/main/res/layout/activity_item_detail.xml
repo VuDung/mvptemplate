@@ -14,6 +14,7 @@
           android:id="@+id/toolbar"
           app:layout_collapseMode="pin"
           app:titleTextColor="@color/white"
+          app:navigationIcon="@drawable/ic_chevron_left_white_24dp"
           android:layout_width="match_parent"
           android:layout_height="?attr/actionBarSize"/>
     </android.support.design.widget.CollapsingToolbarLayout>

@@ -21,6 +21,7 @@ import butterknife.OnClick;
 import com.tnc.template.R;
 import com.tnc.template.common.base.BaseActivity;
 import com.tnc.template.common.di.Injector;
+import com.tnc.template.common.navigator.Navigator;
 import com.tnc.template.common.widget.RadioViewGroupController;
 import com.tnc.template.data.api.ItemManager;
 import com.tnc.template.data.entity.WebItem;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseActivity implements Injector, ItemListener
   private String fetchMode;
   @Inject AppPreference appPreference;
   @Inject SessionManager sessionManager;
+  @Inject Navigator navigator;
   private final String TAG = MainActivity.class.getSimpleName();
 
   @Override protected int layoutRes() {
@@ -126,8 +128,9 @@ public class MainActivity extends BaseActivity implements Injector, ItemListener
     drawerToggle.syncState();
   }
 
-  @Override public void onItemSelected(WebItem item) {
+  @Override public void onItemSelected(WebItem item, int cacheMode) {
     sessionManager.view(this, item.getItemId());
+    navigator.goToItemDetailActivity(this, item, cacheMode);
   }
 
   @Override public void onConfigurationChanged(Configuration newConfig) {

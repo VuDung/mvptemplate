@@ -1,4 +1,4 @@
-package com.tnc.template.main.adapter;
+package com.tnc.template.common;
 
 import android.content.Context;
 import android.support.annotation.CallSuper;
